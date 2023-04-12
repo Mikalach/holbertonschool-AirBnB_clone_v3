@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import jsonify
+from api.v1.views import app_views
 
-app_views = Blueprint('app_views', __name__, url_prefix='/api/v1')
-
-from api.v1.views.index import *
+@app_views.route('/status', methods=['GET'])
+def get_status():
+    return jsonify({'status': 'OK'})
