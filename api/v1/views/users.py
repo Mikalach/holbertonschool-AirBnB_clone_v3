@@ -40,9 +40,12 @@ def create_user():
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
-    name = data.get('name')
-    if name is None:
-        abort(400, 'Missing name')
+    email = data.get('email')
+    if email is None:
+        abort(400, 'Missing email')
+    password = data.get('password')
+    if password is None:
+        abort(400, 'Missing password')
     user = user(**data)
     user.save()
     return jsonify(user.to_dict()), 201
@@ -57,7 +60,7 @@ def update_user(user_id):
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
-    ignore_keys = ['id', 'created_at', 'updated_at']
+    ignore_keys = ['id', 'email', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
             setattr(user, key, value)
