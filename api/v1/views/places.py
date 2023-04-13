@@ -5,11 +5,16 @@ from api.v1.views import app_views
 from models import storage
 from models.place import Place
 from models.user import User
+from models.city import City
 
 
-@app_views.route('/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
 def get_all_places():
     """Retrieves the list of all place objects."""
+    data = request.get_json()
+    city_id = data.get('city_id')
+    if city_id is not isinstance(City):
+        abort(404)
     amenities = storage.all(Place).values()
     return jsonify([place.to_dict() for place in amenities])
 
@@ -35,7 +40,7 @@ def delete_place(place_id):
     return jsonify({})
 
 
-@app_views.route('/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
 def create_place():
     """Creates a place object."""
     data = request.get_json()
