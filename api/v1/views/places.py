@@ -63,7 +63,7 @@ def update_place(place_id):
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
-    ignore_keys = ['id', 'created_at', 'updated_at']
+    ignore_keys = ['id', 'user_id', 'city_id', 'create_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
             setattr(place, key, value)
