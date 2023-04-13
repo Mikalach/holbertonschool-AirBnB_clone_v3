@@ -4,12 +4,12 @@ from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
 from models.user import User
-from models.city import City
 from models.place import Place
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
 def get_all_places():
+    from models.city import City
     """Retrieves the list of all place objects."""
     data = request.get_json()
     city_id = data.get('city_id')
