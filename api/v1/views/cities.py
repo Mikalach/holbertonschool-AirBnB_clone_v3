@@ -3,9 +3,8 @@
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
-from models.state import State
 from models.city import City
-
+from models.state import State
 
 @app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
 def get_all_cities(state_id):
@@ -14,7 +13,7 @@ def get_all_cities(state_id):
     if state is None:
         abort(404)
     cities = storage.all(City).values()
-    cities = [city.to_dict() for city in cities if city.state_id == state_id]
+    cities = [city.to_dict() for city in state.cities]
     return jsonify(cities)
 
 
@@ -51,6 +50,7 @@ def create_state(state_id):
     name = data.get('name')
     if name is None:
         abort(400, 'Missing name')
+    data['state_id'] = state_id
     city = City(**data)
     city.state_id = state_id
     city.save
