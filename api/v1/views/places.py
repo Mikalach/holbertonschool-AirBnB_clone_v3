@@ -42,8 +42,12 @@ def delete_place(place_id):
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
 def create_place():
+    from models.city import City
     """Creates a place object."""
     data = request.get_json()
+    city_id = data.get('city_id')
+    if city_id is not isinstance(City):
+        abort(404)
     if data is None:
         abort(400, 'Not a JSON')
     id = data.get('user_id')
