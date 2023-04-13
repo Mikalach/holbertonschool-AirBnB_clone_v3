@@ -11,8 +11,11 @@ from models.city import City
 def get_all_cities(state_id):
     """Retrieves the list of all City objects of a State object."""
     state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
     cities = storage.all(City).values()
-    return jsonify([city.to_dict() for city in cities if city.state_id == state_id])
+    cities = [city.to_dict() for city in cities if city.state_id == state_id]
+    return jsonify(cities)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
@@ -39,6 +42,9 @@ def delete_state(city_id):
 @app_views.route('/states/<state_id>/cities', methods=['POST'], strict_slashes=False)
 def create_state(state_id):
     """Creates a City object."""
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
