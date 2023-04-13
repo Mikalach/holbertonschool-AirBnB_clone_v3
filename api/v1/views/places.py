@@ -11,12 +11,8 @@ from models.place import Place
 def get_all_places():
     from models.city import City
     """Retrieves the list of all place objects."""
-    data = request.get_json()
-    city_id = data.get('city_id')
-    if city_id is not isinstance(City):
-        abort(404)
-    amenities = storage.all(Place).values()
-    return jsonify([place.to_dict() for place in amenities])
+    cities = storage.all(City).values()
+    return jsonify([place.to_dict() for place in cities])
 
 
 @app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
