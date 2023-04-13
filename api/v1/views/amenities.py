@@ -10,8 +10,7 @@ from models.amenity import Amenity
 def get_all_amenities():
     """Retrieves the list of all Amenity objects."""
     amenities = storage.all(Amenity).values()
-    amenities_list = [amenity.to_dict() for amenity in amenities]
-    return jsonify(amenities_list)
+    return jsonify([amenity.to_dict() for amenity in amenities])
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
@@ -32,7 +31,7 @@ def delete_amenity(amenity_id):
         abort(404)
     amenity.delete()
     storage.save()
-    return jsonify({}), 200
+    return jsonify({})
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
@@ -58,8 +57,9 @@ def update_amenity(amenity_id):
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
+    ignore_keys = ['id', 'created_at', 'updated_at']
     for key, value in data.items():
-        if key not in ['id', 'created_at', 'updated_at']:
+        if key not in ignore_keys:
             setattr(amenity, key, value)
     amenity.save()
     return jsonify(amenity.to_dict()), 200 
