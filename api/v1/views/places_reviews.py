@@ -8,7 +8,8 @@ from models.user import User
 from models.review import Review
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+                 strict_slashes=False)
 def get_all_reviews(place_id):
     """Retrieves the list of all Reviews objects."""
     place = storage.get(Place, place_id)
@@ -39,7 +40,8 @@ def delete_review(review_id):
     return jsonify({}, 200)
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
 def create_reviews(place_id):
     """Creates a review object."""
     place = storage.get(Place, place_id)
@@ -77,7 +79,7 @@ def update_review(review_id):
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    
+
     ignore_keys = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
