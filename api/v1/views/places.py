@@ -14,8 +14,7 @@ def get_all_places(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    places = storage.all(Place).values()
-    return jsonify(places)
+    return jsonify(storage.all(Place).values())
 
 
 @app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
