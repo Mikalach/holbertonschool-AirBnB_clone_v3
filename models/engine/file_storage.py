@@ -71,7 +71,7 @@ class FileStorage:
         """
         key = f"{cls.__name__}.{id}"
         return self.__objects.get(key)
-    
+
     def count(self, cls=None):
         """
         Get the count of objects in storage matching the given class.
