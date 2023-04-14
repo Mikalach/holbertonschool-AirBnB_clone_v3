@@ -46,7 +46,7 @@ def create_user():
     password = data.get('password')
     if password is None:
         abort(400, 'Missing password')
-    user = user(**data)
+    user = User(**data)
     user.save()
     return jsonify(user.to_dict()), 201
 
