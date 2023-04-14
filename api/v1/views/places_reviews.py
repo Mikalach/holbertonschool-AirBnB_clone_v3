@@ -45,21 +45,23 @@ def create_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
+
     data = request.get_json()
+
     if data is None:
         abort(400, 'Not a JSON')
     user_id = data.get('user_id')
     if user_id is None:
         abort(400, 'Missing user_id')
-    user = storage.get(User, user_id)
-    if user is None:
-        abort(404)
     text = data.get('text')
     if text is None:
         abort(400, 'Missing text')
     data['place_id'] = place_id
-    data['user_id'] = user_id
-    data['text'] = text
+
+    user = storage.get(User, data['user_id'])
+    if user is None:
+        abort(404)
+
     review = Review(**data)
     review.save()
     return jsonify(review.to_dict()), 201
@@ -68,12 +70,14 @@ def create_place(place_id):
 @app_views.route('reviews/<review_id>', methods=['PUT'], strict_slashes=False)
 def update_review(review_id):
     """Updates a review object."""
-    review = storage.get(Review, review_id)
-    if review is None:
-        abort(404)
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
+
+    review = storage.get(Review, review_id)
+    if review is None:
+        abort(404)
+    
     ignore_keys = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
