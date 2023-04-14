@@ -3,9 +3,10 @@
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
-from models.review import Review
 from models.place import Place
 from models.user import User
+from models.review import Review
+
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET'], strict_slashes=False)
 def get_all_reviews(place_id):
